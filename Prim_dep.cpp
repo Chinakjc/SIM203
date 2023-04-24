@@ -97,7 +97,6 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
             double lat2 = cities.lat[a.parent];
             double lon2 = cities.lon[a.parent];
             double distanceA = calculateDistance(lat1,lon1,lat2,lon2);
-
             lat1 = cities.lat[b.city] ;
             lon1 = cities.lon[b.city] ;
             lat2 = cities.lat[b.parent] ;
