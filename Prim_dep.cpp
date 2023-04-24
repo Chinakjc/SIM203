@@ -5,16 +5,18 @@
 #include "Prim_dep.hpp"
 
 Prim_dep::Prim_dep(int popMin) : Prim(popMin) {
+    cout<<"test0"<<1<<endl;
     graph = Graph_dep(cities.number);
 #pragma omp parallel for default(none) shared(cities,graph)
     for (int i = 0; i < cities.number; ++i) {
         int dep_code_i = cities.depart[i];
         int pop_i = cities.pop[i];
         Department* dep_i;
-        if(mapDep.find(dep_code_i)==mapDep.end()){
+        if(mapDep.find(dep_code_i)!=mapDep.end()){
             dep_i = mapDep[i];
         }else{
             dep_i = new Department(dep_code_i);
+            mapDep[dep_code_i] = dep_i;
         }
         dep_i->add(i,pop_i);
     }
@@ -75,13 +77,14 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
         Graph_lite graph_i= Graph_lite(cities.number);
 
         //graph
-#pragma omp parallel for default(none) shared(cities,graph)
-        for (int i = 0; i < cities.number; ++i) {
-            for (int j = i + 1; j < cities.number; ++j) {
-                if (i != j) {
-                    graph_i[i].push_back(Edge_lite{j, i});
-                    graph_i[j].push_back(Edge_lite{i, j});
-                }
+        int dep_size = department_i->size();
+#pragma omp parallel for default(none) shared(cities,graph_i)
+        for (int i = 0; i < dep_size; ++i) {
+            int ct_i = department_i->operator[](i);
+            for (int j = i + 1; j < dep_size; ++j) {
+                int ct_j = department_i->operator[](j);
+                graph_i[i].push_back(Edge_lite{ct_j, ct_i});
+                graph_i[j].push_back(Edge_lite{ct_i, ct_j});
             }
         }
 
@@ -105,9 +108,14 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
         });
 
         double totalWeight = 0.0;
-
+        /*
         visited[0] = true;
         for (const Edge_lite &e : graph_i[0]) {
+            pq.push(e);
+        }*/
+        int departmentCapital = department_i->getCapital();
+        visited[departmentCapital] = true;
+        for (const Edge_lite &e : graph_i[departmentCapital]) {
             pq.push(e);
         }
 

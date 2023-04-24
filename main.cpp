@@ -7,7 +7,7 @@
 #include "Util.hpp"
 #include "Prim_std.hpp"
 #include "Prim_memory_saver.hpp"
-
+#include "Prim_dep.hpp"
 
 
 int main() {
@@ -15,15 +15,12 @@ int main() {
     //--- READING cities
     //-----------------------------------------------------------------
 
-    /*int popMin;
+    int popMin;
     cout << "Minimal population? ";
     cin >> popMin;
     //Prim_std p(popMin);
-    Prim_memory_saver p(popMin);
-    p.prim_f(true);*/
-    map<int,string> map1;
-    map1[2]="1";
-    cout<<map1[2]<<endl;
-    cout << map1[5] << endl;
+    //Prim_memory_saver p(popMin);
+    Prim_dep p(popMin);
+    p.prim_f(true);
     return 0;
 }

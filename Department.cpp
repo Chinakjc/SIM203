@@ -20,6 +20,14 @@ int Department::getCapital() const {
     return this->capital;
 }
 
+int Department::operator[](int index) const {
+    return cities[index];
+}
+
+int Department::size() const {
+    return cities.size();
+}
+
 
 
 

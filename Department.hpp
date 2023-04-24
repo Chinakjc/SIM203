@@ -19,6 +19,8 @@ public:
     Department(int departcode);
     void add(int city, int pop);
     int getCapital() const;
+    int operator[](int) const;
+    int size() const;
 };
 
 
