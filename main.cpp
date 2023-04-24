@@ -21,7 +21,7 @@ int main() {
     Prim_std p1(popMin);
     //Prim_memory_saver p(popMin);
     Prim_dep p(popMin);
-    p.prim_f(false);
+    p.prim_f(true);
     p1.prim_f(false);
     return 0;
 }

@@ -5,21 +5,21 @@
 #include "Prim_dep.hpp"
 
 Prim_dep::Prim_dep(int popMin) : Prim(popMin) {
-    cout<<"test0"<<1<<endl;
     graph = Graph_dep(cities.number);
-#pragma omp parallel for default(none) shared(cities,graph)
+
     for (int i = 0; i < cities.number; ++i) {
         int dep_code_i = cities.depart[i];
         int pop_i = cities.pop[i];
         Department* dep_i;
-        if(mapDep.find(dep_code_i)!=mapDep.end()){
-            dep_i = mapDep[i];
-        }else{
+        if(mapDep.find(dep_code_i) != mapDep.end()){
+            dep_i = mapDep[dep_code_i];
+        } else {
             dep_i = new Department(dep_code_i);
             mapDep[dep_code_i] = dep_i;
         }
-        dep_i->add(i,pop_i);
+        dep_i->add(i, pop_i);
     }
+
     for(auto it1 = mapDep.begin(); it1 != mapDep.end(); it1++){
         Department* dep1 = it1->second;
         int cap1 = dep1->getCapital();
@@ -74,17 +74,17 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
     auto treeCap = res.second;
     for(auto it = mapDep.begin(); it != mapDep.end(); it++){
         Department* department_i = it->second;
+        int dep_size = department_i->size();
         Graph_lite graph_i= Graph_lite(cities.number);
 
         //graph
-        int dep_size = department_i->size();
 #pragma omp parallel for default(none) shared(cities,graph_i)
         for (int i = 0; i < dep_size; ++i) {
             int ct_i = department_i->operator[](i);
             for (int j = i + 1; j < dep_size; ++j) {
                 int ct_j = department_i->operator[](j);
-                graph_i[i].push_back(Edge_lite{ct_j, ct_i});
-                graph_i[j].push_back(Edge_lite{ct_i, ct_j});
+                graph_i[ct_i].push_back(Edge_lite{ct_j, ct_i});
+                graph_i[ct_j].push_back(Edge_lite{ct_i, ct_j});
             }
         }
 
