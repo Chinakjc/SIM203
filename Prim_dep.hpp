@@ -15,6 +15,8 @@ private:
     map<int,Department*> mapDep;
 public:
     Prim_dep(int popMin);
+    pair<double, vector<pair<int, int>>> prim_cap() const;
+    pair<double, vector<pair<int, int>>> prim() const override;
 
 };
 
