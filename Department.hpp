@@ -16,11 +16,9 @@ protected:
     std::vector<int> cities;
     int popCap;
 public:
-    Department(int departcode, const ListOfCities& cities);
     Department(int departcode);
     void add(int city, int pop);
     int getCapital() const;
-    pair<double, vector<pair<int,int>>> prim();
 };
 
 

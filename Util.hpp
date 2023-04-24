@@ -54,13 +54,15 @@ struct Edge_std {
 typedef vector<vector<Edge_std>> Graph_std;
 
 struct Edge_dep {
-    int dep;
+    int capital;
     int parent;
     double weight;
     bool operator>(const Edge_dep& other) const {
         return weight > other.weight;
     };
 };
+
+typedef vector<vector<Edge_dep>> Graph_dep;
 
 double calculateDistance(double lat1d,double lon1d, double lat2d, double lon2d);
 

@@ -9,6 +9,7 @@
 #include "Prim.hpp"
 
 class Prim_dep : public Prim{
+private:
 
 };
 
