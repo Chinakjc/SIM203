@@ -12,7 +12,7 @@ ListOfCities citiesReader(int popMin){
     
     cities.number = 0;
     
-    ifstream inputFile("citiesList.csv");
+    ifstream inputFile(input_file_name);
     string myLine, myWord, myName;
     int myPop;
     int myDepartment;
