@@ -92,7 +92,7 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
 
 
 
-        //prim cf Prim_memory_saver::prim()
+        //prim_ad cf Prim_memory_saver::prim_ad()
         vector<bool> visited(graph_i.size(), false);
         //vector<pair<int, int>> edges;
         priority_queue<Edge_lite, vector<Edge_lite>, function<bool(const Edge_lite &, const Edge_lite &)>> pq([this](const Edge_lite &a, const Edge_lite &b) {
