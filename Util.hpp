@@ -16,6 +16,7 @@
 #include <omp.h>
 #include <map>
 #include <functional>
+#include <cfloat>
 
 using namespace std;
 

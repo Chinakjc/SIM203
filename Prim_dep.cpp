@@ -72,6 +72,8 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
     auto res = prim_cap();
     double networkSize = res.first;
     auto treeCap = res.second;
+
+    //boucle pour chaque departement
     for(auto it = mapDep.begin(); it != mapDep.end(); it++){
         Department* department_i = it->second;
         int dep_size = department_i->size();
@@ -87,6 +89,8 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
                 graph_i[ct_j].push_back(Edge_lite{ct_i, ct_j});
             }
         }
+
+
 
         //prim cf Prim_memory_saver::prim()
         vector<bool> visited(graph_i.size(), false);
