@@ -15,6 +15,7 @@
 class Prim_adaptive {
 private:
     Prim* prim_ad;
+
 public:
     Prim_adaptive(int popMin);
     pair<double, vector<pair<int,int>>> prim() const;

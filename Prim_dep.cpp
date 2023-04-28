@@ -5,6 +5,36 @@
 #include "Prim_dep.hpp"
 
 Prim_dep::Prim_dep(int popMin) : Prim(popMin){
+    /*for (int i = 0; i < cities.number; ++i) {
+        int dep_code_i = cities.depart[i];
+        int pop_i = cities.pop[i];
+        Department* dep_i;
+        if(mapDep.find(dep_code_i) != mapDep.end()){
+            dep_i = mapDep[dep_code_i];
+        } else {
+            dep_i = new Department(dep_code_i);
+            mapDep[dep_code_i] = dep_i;
+        }
+        dep_i->add(i, pop_i);
+    }
+
+    graph = Graph_dep(mapDep.size());
+
+    int ii = 0;
+    for(auto it1 = mapDep.begin(); it1 != mapDep.end(); it1++){
+        Department* dep1 = it1->second;
+        int cap1 = dep1->getCapital();
+        for(auto it2 = next(it1); it2 != mapDep.end(); it2++){
+            Department* dep2 = it2->second;
+            int cap2 = dep2->getCapital();
+            double lat1 = cities.lat[cap1];
+            double lon1 = cities.lon[cap1];
+            double lat2 = cities.lat[cap2];
+            double lon2 = cities.lon[cap2];
+            // Calculate the distance between two cities
+            double distance = calculateDistance(lat1,lon1,lat2,lon2);
+            graph[ii].push_back(Edge_dep{cap2, cap1, distance});
+        }*/
     graph = Graph_dep(cities.number);
 
     for (int i = 0; i < cities.number; ++i) {
@@ -33,6 +63,7 @@ Prim_dep::Prim_dep(int popMin) : Prim(popMin){
             // Calculate the distance between two cities
             double distance = calculateDistance(lat1,lon1,lat2,lon2);
             graph[cap1].push_back(Edge_dep{cap2, cap1, distance});
+            graph[cap2].push_back(Edge_dep{cap1, cap2, distance});
         }
     }
 }
@@ -43,6 +74,7 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim_cap() const {
     priority_queue<Edge_dep, vector<Edge_dep>, greater<Edge_dep>> pq;
     double totalWeight = 0.0;
     int init_ct = mapDep.begin()->second->getCapital();
+    cout<<cities.name[init_ct]<<endl;
     visited[init_ct] = true;
     for (const Edge_dep& e : graph[init_ct]){
         pq.push(e);
@@ -73,17 +105,12 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
     double networkSize = res.first;
     auto treeCap = res.second;
 
-    cout<<"tree_cap"<<endl;
-    for(int kk = 0; kk<treeCap.size(); kk++){
-        cout<<cities.name[treeCap[kk].first]<<"----->"<<cities.name[treeCap[kk].second]<<endl;
-    }
-
     //boucle pour chaque departement
     for(auto it = mapDep.begin(); it != mapDep.end(); it++){
         Department* department_i = it->second;
         int dep_size = department_i->size();
         Graph_lite graph_i= Graph_lite(cities.number);
-        cout<<"cap = "<<cities.name[department_i->getCapital()]<<" number = "<<department_i->getCapital()<<endl;
+
 
         //graph
 #pragma omp parallel for default(none) shared(cities,graph_i)
@@ -117,11 +144,7 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
         });
 
         double totalWeight = 0.0;
-        /*
-        visited[0] = true;
-        for (const Edge_lite &e : graph_i[0]) {
-            pq.push(e);
-        }*/
+
         int departmentCapital = department_i->getCapital();
         visited[departmentCapital] = true;
         for (const Edge_lite &e : graph_i[departmentCapital]) {
