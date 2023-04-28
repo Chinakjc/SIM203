@@ -4,7 +4,7 @@
 
 #include "Prim_dep.hpp"
 
-Prim_dep::Prim_dep(int popMin) : Prim(popMin) {
+Prim_dep::Prim_dep(int popMin) : Prim(popMin){
     graph = Graph_dep(cities.number);
 
     for (int i = 0; i < cities.number; ++i) {
@@ -42,9 +42,9 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim_cap() const {
     vector<pair<int,int>> edges;
     priority_queue<Edge_dep, vector<Edge_dep>, greater<Edge_dep>> pq;
     double totalWeight = 0.0;
-
-    visited[0] = true;
-    for (const Edge_dep& e : graph[0]){
+    int init_ct = mapDep.begin()->second->getCapital();
+    visited[init_ct] = true;
+    for (const Edge_dep& e : graph[init_ct]){
         pq.push(e);
     }
 
@@ -73,11 +73,17 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
     double networkSize = res.first;
     auto treeCap = res.second;
 
+    cout<<"tree_cap"<<endl;
+    for(int kk = 0; kk<treeCap.size(); kk++){
+        cout<<cities.name[treeCap[kk].first]<<"----->"<<cities.name[treeCap[kk].second]<<endl;
+    }
+
     //boucle pour chaque departement
     for(auto it = mapDep.begin(); it != mapDep.end(); it++){
         Department* department_i = it->second;
         int dep_size = department_i->size();
         Graph_lite graph_i= Graph_lite(cities.number);
+        cout<<"cap = "<<cities.name[department_i->getCapital()]<<" number = "<<department_i->getCapital()<<endl;
 
         //graph
 #pragma omp parallel for default(none) shared(cities,graph_i)

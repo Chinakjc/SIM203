@@ -18,10 +18,10 @@ int main() {
     int popMin;
     cout << "Minimal population? ";
     cin >> popMin;
-    Prim_std p(popMin);
+    //Prim_std p(popMin);
     //Prim_memory_saver p(popMin);
-    //Prim_dep p(popMin);
-    p.prim_f(true);
+    Prim_dep p(popMin);
+    p.prim_f(false);
     //p1.prim_f(false);
     return 0;
 }
