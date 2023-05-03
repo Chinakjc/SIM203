@@ -12,7 +12,7 @@ Prim::Prim(ListOfCities *cities): cities(cities){
 
 }
 
-void Prim::prim_f(bool text) const {
+pair<double,double> Prim::prim_f(bool text) const {
     clock_t t0 = clock();
     auto result = prim();
     clock_t t1 = clock();
@@ -47,5 +47,7 @@ void Prim::prim_f(bool text) const {
         outputFile.close();
 
     }
+
+    return {t1 - t0, networkSize};
 
 }

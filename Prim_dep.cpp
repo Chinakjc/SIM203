@@ -75,15 +75,23 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
     auto res = prim_cap();
     double networkSize = res.first;
     auto treeCap = res.second;
+    //int index_of_treeCap = treeCap.size();
+
+    //treeCap.resize(cities->number - 1);
+    //cout<<cities->name[0]<<endl;
 
     // Loop for each department
-    for(auto it = mapDep.begin(); it != mapDep.end(); it++){
+#pragma omp parallel for default(none)  reduction(+:networkSize) shared(treeCap)
+    for(int iteration1= 0; iteration1< mapDep.size(); iteration1++){
+        auto it = mapDep.begin();
+        for(int k = 0; k< iteration1 ; k++)
+            it++;
         Department* department_i = it->second;
         int dep_size = department_i->size();
 
 
         vector<bool> visited(cities->number, false);
-        vector<pair<int, int>> edges;
+        //vector<pair<int, int>> edges;
 
         auto edge_compare = [this](const Edge_lite &a, const Edge_lite &b) {
             double lat1 = cities->lat[a.city];
@@ -124,6 +132,7 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
             }
 
             Edge_lite current = pq.top();
+            //cout<<cities->name[current.parent]<<" -> "<<cities->name[current.city]<<endl;
             pq.pop();
 
             visited[current.city] = true;
@@ -134,8 +143,15 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
             double distance = calculateDistance(lat1, lon1, lat2, lon2);
 
             totalWeight += distance;
-            edges.push_back({current.city, current.parent});
-            treeCap.push_back({current.city, current.parent});
+            //edges.push_back({current.city, current.parent});
+            //treeCap.push_back({current.city, current.parent});
+#pragma omp critical
+            {
+                treeCap.push_back({current.city, current.parent});
+            };
+            //treeCap[index_of_treeCap] = {current.city, current.parent};
+            //index_of_treeCap++;
+
 
             for (int i = 0; i < dep_size; ++i) {
                 int ct_i = department_i->operator[](i);
@@ -145,8 +161,9 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
             }
         } while (!pq.empty());
 
+
         networkSize += totalWeight;
+        it++;
     }
     return {networkSize, treeCap};
 }
-

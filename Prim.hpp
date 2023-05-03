@@ -16,7 +16,7 @@ public:
     Prim(int popMin);
     Prim(ListOfCities* cities);
     virtual pair<double, vector<pair<int,int>>> prim() const = 0;
-    void prim_f(bool text) const;
+    pair<double,double> prim_f(bool text) const;
 };
 
 

@@ -79,4 +79,10 @@ inline int get_index_visited(int number, int parent, int city){
     return number*parent + city;
 }
 
+enum prim_mode{
+    naive = 0,
+    mem_saver = 1,
+    dep = 2,
+};
+
 #endif //SIM203_UTIL_HPP
