@@ -9,8 +9,7 @@
 #include "Prim.hpp"
 
 class Prim_memory_saver : public Prim{
-private:
-    Graph_lite graph;
+
 public:
     Prim_memory_saver(int popMin);
     pair<double, vector<pair<int, int>>> prim() const override;

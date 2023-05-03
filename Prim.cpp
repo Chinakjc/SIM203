@@ -4,7 +4,12 @@
 
 #include "Prim.hpp"
 
-Prim::Prim(int popMin) : cities(citiesReader(popMin)){
+Prim::Prim(int popMin) : cities(new ListOfCities(citiesReader(popMin))){
+
+}
+
+Prim::Prim(ListOfCities *cities): cities(cities){
+
 }
 
 void Prim::prim_f(bool text) const {
@@ -26,7 +31,7 @@ void Prim::prim_f(bool text) const {
         cout << "Generated tree:" << endl;
 
         for (const pair<int, int>& connection : connections) {
-            cout << "City " << cities.name[connection.first] << " connected to City " << cities.name[connection.second] << endl;
+            cout << "City " << cities->name[connection.first] << " connected to City " << cities->name[connection.second] << endl;
         }
     }
 
@@ -36,7 +41,7 @@ void Prim::prim_f(bool text) const {
     if (outputFile.is_open()){
         outputFile << "city_name, lattiude, longitude, parent_city_name, parent_latitude, parent_longitude, population" << endl;
         for (const pair<int, int>& connection : connections){
-            outputFile << cities.name[connection.first] << "," << cities.lat[connection.first] << "," << cities.lon[connection.first] << "," << cities.name[connection.second] << "," << cities.lat[connection.second] << "," << cities.lon[connection.second] << "," << cities.pop[connection.first] << endl;
+            outputFile << cities->name[connection.first] << "," << cities->lat[connection.first] << "," << cities->lon[connection.first] << "," << cities->name[connection.second] << "," << cities->lat[connection.second] << "," << cities->lon[connection.second] << "," << cities->pop[connection.first] << endl;
 
         }
         outputFile.close();

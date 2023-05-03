@@ -5,15 +5,15 @@
 #include "Prim_std.hpp"
 
 Prim_std::Prim_std(int popMin) : Prim(popMin){
-    graph = Graph_std(cities.number);
+    graph = Graph_std(cities->number);
 #pragma omp parallel for default(none) shared(cities,graph)
-    for (int i = 0; i < cities.number; ++i) {
-        for (int j = 0; j < cities.number; ++j) {
+    for (int i = 0; i < cities->number; ++i) {
+        for (int j = 0; j < cities->number; ++j) {
             if (i != j) {
-                double lat1 = cities.lat[i];
-                double lon1 = cities.lon[i];
-                double lat2 = cities.lat[j];
-                double lon2 = cities.lon[j];
+                double lat1 = cities->lat[i];
+                double lon1 = cities->lon[i];
+                double lat2 = cities->lat[j];
+                double lon2 = cities->lon[j];
                 // Calculate the distance between two cities
                 double distance = calculateDistance(lat1,lon1,lat2,lon2);
                 graph[i].push_back(Edge_std{j, i, distance});

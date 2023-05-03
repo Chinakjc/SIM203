@@ -13,7 +13,6 @@ class Prim_dep : public Prim{
 private:
     Graph_dep graph;
     map<int,Department*> mapDep;
-    //vector<int> globalIndexCap;
 public:
     Prim_dep(int popMin);
     pair<double, vector<pair<int, int>>> prim_cap() const;
