@@ -18,25 +18,31 @@ bool PerformanceTest::write() {
     return false;
 }
 
-void PerformanceTest::change_size_test(int num_t, int pMin, int pMax, int step, int mode) {
+void PerformanceTest::change_size_test(int num_t, int pMin, int pMax, int step, prim_mode mode, int loop_num) {
     omp_set_num_threads(num_t);
     output += "popMin, running_time, network_size\n";
     for(int popMin = pMin; popMin < pMax; popMin+= step){
         Prim * prim;
         switch (mode) {
-            case 0:
+            case naive:
                 prim = new Prim_std(popMin);
                 break;
-            case 1:
+            case mem_saver:
                 prim = new Prim_memory_saver(popMin);
                 break;
-            case 2:
+            case dep:
                 prim = new Prim_dep(popMin);
                 break;
         }
-        auto res = prim->prim_f(false);
-        double res_t = res.first;
-        double  res_size = res.second;
+        double res_t = 0;
+        double  res_size = 0;
+        for(int i = 0; i< loop_num; i++){
+            auto res = prim->prim_f(false);
+            res_t += res.first;
+            res_size += res.second;
+        }
+        res_t /= (double)loop_num;
+        res_size /= (double)loop_num;
         output += to_string(popMin);
         output += ",";
         output += to_string(res_t);
@@ -48,25 +54,31 @@ void PerformanceTest::change_size_test(int num_t, int pMin, int pMax, int step, 
     write();
 }
 
-void PerformanceTest::change_threads_test(int popMin, int tMin, int tMax, int step, int mode) {
+void PerformanceTest::change_threads_test(int popMin, int tMin, int tMax, int step, prim_mode mode, int loop_num) {
     output += "threads, running_time, network_size\n";
     for(int number = tMin; number < tMax; number += step){
         Prim * prim;
         switch (mode) {
-            case 0:
+            case naive:
                 prim = new Prim_std(popMin);
                 break;
-            case 1:
+            case mem_saver:
                 prim = new Prim_memory_saver(popMin);
                 break;
-            case 2:
+            case dep:
                 prim = new Prim_dep(popMin);
                 break;
         }
         omp_set_num_threads(number);
-        auto res = prim->prim_f(false);
-        double res_t = res.first;
-        double  res_size = res.second;
+        double res_t = 0;
+        double  res_size = 0;
+        for(int i = 0; i< loop_num; i++){
+            auto res = prim->prim_f(false);
+            res_t += res.first;
+            res_size += res.second;
+        }
+        res_t /= (double)loop_num;
+        res_size /= (double)loop_num;
         output += to_string(number);
         output += ",";
         output += to_string(res_t);
@@ -79,38 +91,44 @@ void PerformanceTest::change_threads_test(int popMin, int tMin, int tMax, int st
 }
 
 void PerformanceTest::speedup_change_threads_test(int popMin, int tMin, int tMax, int step, prim_mode mode1,
-                                                  prim_mode mode2) {
+                                                  prim_mode mode2, int loop_num) {
     output += "threads, speedup\n";
     for(int number = tMin; number < tMax; number += step){
         Prim * prim1;
         Prim * prim2;
         switch (mode1) {
-            case 0:
+            case naive:
                 prim1 = new Prim_std(popMin);
                 break;
-            case 1:
+            case mem_saver:
                 prim1 = new Prim_memory_saver(popMin);
                 break;
-            case 2:
+            case dep:
                 prim1 = new Prim_dep(popMin);
                 break;
         }
         switch (mode2) {
-            case 0:
+            case naive:
                 prim2 = new Prim_std(popMin);
                 break;
-            case 1:
+            case mem_saver:
                 prim2 = new Prim_memory_saver(popMin);
                 break;
-            case 2:
+            case dep:
                 prim2 = new Prim_dep(popMin);
                 break;
         }
         omp_set_num_threads(number);
-        auto res1 = prim1->prim_f(false);
-        double res_t1 = res1.first;
-        auto res2 = prim2->prim_f(false);
-        double res_t2 = res2.first;
+        double res_t1 = 0;
+        double res_t2 = 0;
+        for(int i = 0; i< loop_num; i++){
+            auto res1 = prim1->prim_f(false);
+            res_t1 += res1.first;
+            auto res2 = prim2->prim_f(false);
+            res_t2 += res2.first;
+        }
+        res_t1 /= (double)loop_num;
+        res_t2 /= (double)loop_num;
         output += to_string(number);
         output += ",";
         output += to_string(res_t1 / res_t2);

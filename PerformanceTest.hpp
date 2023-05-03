@@ -20,9 +20,9 @@ private:
     bool write();
 public:
     explicit PerformanceTest(string op_name);
-    void change_size_test(int num_t, int pMin, int pMax, int step, int mode);// mode 0 std, mode 1 ms, mode 2 dep
-    void change_threads_test(int popMin, int tMin, int tMax, int step, int mode);
-    void speedup_change_threads_test(int popMin, int tMin, int tMax, int step, prim_mode mode1 = naive, prim_mode mode2 = dep);
+    void change_size_test(int num_t, int pMin, int pMax, int step, prim_mode mode, int loop_num = 3);
+    void change_threads_test(int popMin, int tMin, int tMax, int step, prim_mode mode, int loop_num = 3);
+    void speedup_change_threads_test(int popMin, int tMin, int tMax, int step, prim_mode mode1 = naive, prim_mode mode2 = dep, int loop_num = 3);
 
 };
 

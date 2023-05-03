@@ -45,7 +45,6 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim_cap() const {
     priority_queue<Edge_dep, vector<Edge_dep>, greater<Edge_dep>> pq;
     double totalWeight = 0.0;
     int init_ct = mapDep.begin()->second->getCapital();
-    //cout<<cities.name[init_ct]<<endl;
     visited[init_ct] = true;
     for (const Edge_dep& e : graph[init_ct]){
         pq.push(e);
@@ -75,10 +74,6 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
     auto res = prim_cap();
     double networkSize = res.first;
     auto treeCap = res.second;
-    //int index_of_treeCap = treeCap.size();
-
-    //treeCap.resize(cities->number - 1);
-    //cout<<cities->name[0]<<endl;
 
     // Loop for each department
 #pragma omp parallel for default(none)  reduction(+:networkSize) shared(treeCap)
@@ -132,7 +127,6 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
             }
 
             Edge_lite current = pq.top();
-            //cout<<cities->name[current.parent]<<" -> "<<cities->name[current.city]<<endl;
             pq.pop();
 
             visited[current.city] = true;
@@ -143,14 +137,12 @@ pair<double, vector<pair<int, int>>> Prim_dep::prim() const {
             double distance = calculateDistance(lat1, lon1, lat2, lon2);
 
             totalWeight += distance;
-            //edges.push_back({current.city, current.parent});
-            //treeCap.push_back({current.city, current.parent});
+
 #pragma omp critical
             {
                 treeCap.push_back({current.city, current.parent});
             };
-            //treeCap[index_of_treeCap] = {current.city, current.parent};
-            //index_of_treeCap++;
+
 
 
             for (int i = 0; i < dep_size; ++i) {
