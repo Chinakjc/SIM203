@@ -44,7 +44,7 @@ void PerformanceTest::change_size_test(int num_t, int pMin, int pMax, int step, 
         }
         res_t /= (double)loop_num;
         res_size /= (double)loop_num;
-        double gflops = (2.0 * cities_num - 2.0)/(100000.0 * res_t)*(cities_num - 1.0);
+        double gflops = (2.0 * cities_num - 2.0)/(1000000.0 * res_t)*(cities_num - 1.0);
         output += to_string(popMin);
         output += ",";
         output += to_string(res_t);
@@ -84,7 +84,7 @@ void PerformanceTest::change_threads_test(int popMin, int tMin, int tMax, int st
         }
         res_t /= (double)loop_num;
         res_size /= (double)loop_num;
-        double gflops = (2.0 * cities_num - 2.0)/(100000.0 * res_t)*(cities_num - 1.0);
+        double gflops = (2.0 * cities_num - 2.0)/(1000000.0 * res_t)*(cities_num - 1.0);
         output += to_string(number);
         output += ",";
         output += to_string(res_t);
