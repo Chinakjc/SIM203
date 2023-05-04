@@ -20,7 +20,7 @@ bool PerformanceTest::write() {
 
 void PerformanceTest::change_size_test(int num_t, int pMin, int pMax, int step, prim_mode mode, int loop_num) {
     omp_set_num_threads(num_t);
-    output += "popMin, running_time, network_size\n";
+    output += "popMin, running_time, Gflops, network_size\n";
     for(int popMin = pMin; popMin < pMax; popMin+= step){
         Prim * prim;
         switch (mode) {
@@ -34,6 +34,7 @@ void PerformanceTest::change_size_test(int num_t, int pMin, int pMax, int step, 
                 prim = new Prim_dep(popMin);
                 break;
         }
+        int cities_num = prim->size();
         double res_t = 0;
         double  res_size = 0;
         for(int i = 0; i< loop_num; i++){
@@ -43,9 +44,12 @@ void PerformanceTest::change_size_test(int num_t, int pMin, int pMax, int step, 
         }
         res_t /= (double)loop_num;
         res_size /= (double)loop_num;
+        double gflops = (2.0 * cities_num - 2.0)/(100000.0 * res_t)*(cities_num - 1.0);
         output += to_string(popMin);
         output += ",";
         output += to_string(res_t);
+        output += ",";
+        output += to_string(gflops);
         output += ",";
         output += to_string(res_size);
         output += "\n";
@@ -55,7 +59,7 @@ void PerformanceTest::change_size_test(int num_t, int pMin, int pMax, int step, 
 }
 
 void PerformanceTest::change_threads_test(int popMin, int tMin, int tMax, int step, prim_mode mode, int loop_num) {
-    output += "threads, running_time, network_size\n";
+    output += "threads, running_time, Gflops, network_size\n";
     for(int number = tMin; number < tMax; number += step){
         Prim * prim;
         switch (mode) {
@@ -69,6 +73,7 @@ void PerformanceTest::change_threads_test(int popMin, int tMin, int tMax, int st
                 prim = new Prim_dep(popMin);
                 break;
         }
+        int cities_num = prim->size();
         omp_set_num_threads(number);
         double res_t = 0;
         double  res_size = 0;
@@ -79,9 +84,12 @@ void PerformanceTest::change_threads_test(int popMin, int tMin, int tMax, int st
         }
         res_t /= (double)loop_num;
         res_size /= (double)loop_num;
+        double gflops = (2.0 * cities_num - 2.0)/(100000.0 * res_t)*(cities_num - 1.0);
         output += to_string(number);
         output += ",";
         output += to_string(res_t);
+        output += ",";
+        output += to_string(gflops);
         output += ",";
         output += to_string(res_size);
         output += "\n";

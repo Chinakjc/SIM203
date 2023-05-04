@@ -51,3 +51,7 @@ pair<double,double> Prim::prim_f(bool text) const {
     return {t1 - t0, networkSize};
 
 }
+
+int Prim::size() const {
+    return cities->number;
+}
